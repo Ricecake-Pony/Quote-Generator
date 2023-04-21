@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, {useState} from 'react';
+import axios from 'axios';
 import './App.css';
 
+
 function App() {
+  const [advice, setAdvice] = useState([])
+
+  function fetchQuote() {
+    axios.get('https://api.adviceslip.com/advice')
+    .then(r => 
+    {
+      const {advice} = r.data.slip
+      console.log(advice)
+      setAdvice(advice) // setting the advice state to a string instead of an object to get rid of an error with onClick
+    })
+    .catch ((error) => {
+      console.log(error);
+    })
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className='card'>
+        <h1 className="header"> {advice}</h1>
+          <button onClick={fetchQuote} className='button'> Click For New Quote! </button>
+      </div>
     </div>
   );
 }
